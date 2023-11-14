@@ -1,5 +1,6 @@
 package com.example.networkapp
 
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -14,10 +15,12 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import java.io.File
 
 // TODO (1: Fix any bugs)
 // TODO (2: Add function saveComic(...) to save and load comic info automatically when app starts)
 
+private const val AUTO_SAVE_KEY = "auto_save"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var requestQueue: RequestQueue
@@ -27,9 +30,24 @@ class MainActivity : AppCompatActivity() {
     lateinit var showButton: Button
     lateinit var comicImageView: ImageView
 
+    //Create values and variables for save functionality
+    private var autoSave = false
+    private lateinit var preferences: SharedPreferences
+    private val internalFileName = "my_file"
+    private lateinit var file: File
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Get preferences
+        preferences = getPreferences(MODE_PRIVATE)
+
+        //Create file reference for app specific file
+        file = File(filesDir, internalFileName)
+
+        // Read last saved value from preferences, or false if no value saved
+        autoSave = preferences.getBoolean(AUTO_SAVE_KEY, false)
 
         requestQueue = Volley.newRequestQueue(this)
 
@@ -59,5 +77,7 @@ class MainActivity : AppCompatActivity() {
         Picasso.get().load(comicObject.getString("img")).into(comicImageView)
     }
 
+    //Create a function called save comic
+    private fun saveComic(comicObject: JSONObject) {
 
-}
+    }
